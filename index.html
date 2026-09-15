@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Relay Lab V2 — protection relay engineering and secondary injection simulation workbench." />
+  <title>Relay Lab V2 — Protection Engineering Workbench</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark">RL</div>
+        <div>
+          <div class="eyebrow">PROTECTION ENGINEERING WORKBENCH</div>
+          <h1>Relay Lab <span>V2</span></h1>
+        </div>
+      </div>
+      <div class="top-controls">
+        <div class="segmented" id="levelControl" aria-label="Experience level">
+          <button data-level="basic">Basic</button>
+          <button data-level="intermediate" class="active">Intermediate</button>
+          <button data-level="expert">Expert</button>
+        </div>
+        <div class="segmented" id="physicsControl" aria-label="Simulation physics">
+          <button data-physics="open" class="active">Open Loop</button>
+          <button data-physics="closed">Closed Loop</button>
+        </div>
+        <div class="status-chip ok" id="engineHealth">ENGINE READY</div>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <section class="side-section">
+        <div class="side-title">Workspace</div>
+        <button class="nav-item active" data-view="workbench"><span>▦</span> Engineering Workbench</button>
+        <button class="nav-item" data-view="logic"><span>⌘</span> Trip Logic</button>
+        <button class="nav-item" data-view="events"><span>≡</span> SOE / Evidence</button>
+        <button class="nav-item" data-view="library"><span>◫</span> Relay Library</button>
+      </section>
+      <section class="side-section">
+        <div class="side-title">Asset</div>
+        <div class="asset-grid" id="assetGrid">
+          <button data-asset="generic" class="active">Generic</button>
+          <button data-asset="transformer">Transformer</button>
+          <button data-asset="generator">Generator</button>
+          <button data-asset="motor">Motor</button>
+          <button data-asset="feeder">MCC / Feeder</button>
+          <button data-asset="line">Line</button>
+        </div>
+      </section>
+      <section class="side-section grow">
+        <div class="side-title">Reference Device</div>
+        <select id="profileSelect" class="field-select"></select>
+        <div class="profile-status" id="profileStatus"></div>
+        <p class="microcopy">Vendor profiles are adapters over the common protection engine. Reference profiles do not claim proprietary firmware emulation.</p>
+      </section>
+      <section class="side-section version-box">
+        <div><b>Version policy</b></div>
+        <div>V1: frozen legacy</div>
+        <div>V2: active development</div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="hero-strip">
+        <div>
+          <div class="eyebrow">SECONDARY INJECTION · COMMON ENGINE</div>
+          <h2 id="assetTitle">Generic Protection Lab</h2>
+          <p id="assetSubtitle">Inject canonical signals, observe protection states, follow the full trip chain, and inspect evidence.</p>
+        </div>
+        <div class="hero-actions">
+          <label class="mode-card">
+            <span>Simulation fidelity</span>
+            <select id="fidelitySelect">
+              <option value="ideal">IDEAL MODE</option>
+              <option value="hardware">REALISTIC / HARDWARE MODE</option>
+            </select>
+          </label>
+          <label class="mode-card">
+            <span>Test boundary</span>
+            <select id="boundarySelect">
+              <option value="element">Element</option>
+              <option value="relay">Relay output</option>
+              <option value="panel">Panel / trip circuit</option>
+              <option value="breaker" selected>Breaker</option>
+              <option value="system">System</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="panel injector-panel">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">SECONDARY TEST SET</div>
+              <h3>Injection Console · 6I / 6V</h3>
+            </div>
+            <button class="output-toggle" id="outputToggle">OUTPUT OFF</button>
+          </div>
+
+          <div class="tabbar" id="injectorTabs">
+            <button data-tab="current" class="active">Current</button>
+            <button data-tab="voltage">Voltage</button>
+            <button data-tab="binary">Binary I/O</button>
+          </div>
+
+          <div class="channel-area" id="channelArea"></div>
+
+          <div class="injector-footer">
+            <label>Frequency <input id="frequencyInput" type="number" min="1" max="100" step="0.1" value="50" /> Hz</label>
+            <label>Fine step
+              <select id="fineStep"><option>0.01</option><option selected>0.1</option><option>1</option></select>
+            </label>
+            <div class="constraint" id="constraintStatus">IDEAL VIRTUAL TESTER · capability check passed</div>
+          </div>
+        </div>
+
+        <div class="panel relay-panel">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">RELAY UNDER TEST</div>
+              <h3 id="relayName">Generic Multifunction</h3>
+            </div>
+            <span class="badge reference" id="relayBadge">GENERIC / IEC MODEL</span>
+          </div>
+
+          <div class="relay-face">
+            <div class="relay-lcd">
+              <div class="lcd-row"><span>FUNCTION</span><strong id="lcdFunction">51</strong></div>
+              <div class="lcd-row"><span>STATUS</span><strong id="lcdStatus">READY</strong></div>
+              <div class="lcd-row"><span>I MAX</span><strong id="lcdImax">0.000 A</strong></div>
+              <div class="lcd-row"><span>V MIN</span><strong id="lcdVmin">0.00 V</strong></div>
+              <div class="lcd-row"><span>FREQ</span><strong id="lcdFreq">50.00 Hz</strong></div>
+            </div>
+            <div class="lamp-bank">
+              <div class="lamp" data-lamp="pickup"><i></i><span>PICKUP</span></div>
+              <div class="lamp" data-lamp="operate"><i></i><span>OPERATE</span></div>
+              <div class="lamp" data-lamp="bo"><i></i><span>BO1</span></div>
+              <div class="lamp" data-lamp="bi"><i></i><span>BI1</span></div>
+              <div class="lamp" data-lamp="coil"><i></i><span>TRIP COIL</span></div>
+              <div class="lamp" data-lamp="lockout"><i></i><span>86</span></div>
+            </div>
+            <div class="breaker-card">
+              <div class="breaker-symbol" id="breakerSymbol"><span></span></div>
+              <div>
+                <div class="eyebrow">CIRCUIT BREAKER 52</div>
+                <strong id="breakerState">CLOSED</strong>
+                <div class="tiny" id="breakerAux">52a=1 · 52b=0</div>
+              </div>
+              <label class="failure-toggle"><input type="checkbox" id="breakerFail" /> Simulate mechanical failure</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel visualization-panel">
+          <div class="panel-head compact">
+            <div><div class="eyebrow">MEASUREMENT</div><h3>Signal Visualization</h3></div>
+          </div>
+          <div class="tabbar compact" id="visualTabs">
+            <button class="active" data-visual="phasor">Phasor</button>
+            <button data-visual="waveform">Waveform</button>
+            <button data-visual="curve">Curve</button>
+          </div>
+          <canvas id="visualCanvas" width="740" height="360"></canvas>
+          <div class="visual-legend" id="visualLegend"></div>
+        </div>
+
+        <div class="panel settings-panel">
+          <div class="panel-head compact">
+            <div><div class="eyebrow">01 · SETTINGS & TEST CONTRACT</div><h3>Protection & Method</h3></div>
+          </div>
+          <div class="form-grid">
+            <label>Protection function
+              <select id="functionSelect"></select>
+            </label>
+            <label>Test method
+              <select id="methodSelect">
+                <option value="shot">Single Shot · Operating Time</option>
+                <option value="ramp">Ramp · Pickup / Dropout</option>
+                <option value="sequence">State Sequence</option>
+              </select>
+            </label>
+            <label id="pickupField">Pickup <input id="pickupInput" type="number" min="0.01" step="0.01" value="1" /></label>
+            <label id="curveField">Curve
+              <select id="curveSelect">
+                <option value="si">IEC Standard Inverse</option>
+                <option value="vi">IEC Very Inverse</option>
+                <option value="ei">IEC Extremely Inverse</option>
+                <option value="dt">Definite Time</option>
+              </select>
+            </label>
+            <label id="tmsField">TMS / Delay <input id="tmsInput" type="number" min="0.01" step="0.01" value="0.1" /></label>
+            <label>CT primary <input id="ctPrimary" type="number" min="1" step="1" value="600" /></label>
+            <label>CT secondary <input id="ctSecondary" type="number" min="0.1" step="0.1" value="1" /></label>
+            <label>Expected endpoint
+              <select id="endpointSelect">
+                <option value="operate">Element operate</option>
+                <option value="bo">Relay BO</option>
+                <option value="bi">Tester BI</option>
+                <option value="breaker" selected>Breaker open</option>
+                <option value="currentZero">Current extinction</option>
+              </select>
+            </label>
+            <label>Tolerance <input id="toleranceInput" type="number" min="0" step="1" value="20" /> ms</label>
+            <label>Max test duration <input id="maxDurationInput" type="number" min="0.2" step="0.1" value="5" /> s</label>
+          </div>
+          <div class="setting-note" id="settingNote">51 generic IEC model. Tolerance is a training value unless a manual/procedure source is selected.</div>
+        </div>
+
+        <div class="panel response-panel">
+          <div class="panel-head compact">
+            <div><div class="eyebrow">02 · PROTECTION RESPONSE</div><h3>Live Engineering State</h3></div>
+            <span class="verdict pending" id="verdictBadge">NOT RUN</span>
+          </div>
+          <div class="metric-grid">
+            <div><span>Measured input</span><strong id="metricInput">0.000 A</strong></div>
+            <div><span>Threshold</span><strong id="metricThreshold">1.000 A</strong></div>
+            <div><span>Expected operate</span><strong id="metricExpected">—</strong></div>
+            <div><span>Actual endpoint</span><strong id="metricActual">—</strong></div>
+            <div><span>Error</span><strong id="metricError">—</strong></div>
+            <div><span>Primary equiv.</span><strong id="metricPrimary">0 A</strong></div>
+          </div>
+          <div class="why-box" id="whyBox">
+            <b>Why?</b>
+            <span>Configure a test and start injection. This panel explains pickup, timing, blocks, trip routing, and breaker behavior.</span>
+          </div>
+        </div>
+
+        <div class="panel logic-panel">
+          <div class="panel-head compact">
+            <div><div class="eyebrow">03 · EXECUTABLE TRIP PATH</div><h3>Signal Graph</h3></div>
+          </div>
+          <div class="logic-flow" id="logicFlow">
+            <div class="logic-node" data-node="signal"><span>Injected I/V</span></div><b>→</b>
+            <div class="logic-node" data-node="pickup"><span>Element Pickup</span></div><b>→</b>
+            <div class="logic-node" data-node="operate"><span>Timer / Operate</span></div><b>→</b>
+            <div class="logic-node" data-node="scheme"><span>Scheme Logic</span></div><b>→</b>
+            <div class="logic-node" data-node="bo"><span>Relay BO</span></div><b>→</b>
+            <div class="logic-node" data-node="coil"><span>Trip Coil / 86</span></div><b>→</b>
+            <div class="logic-node" data-node="breaker"><span>CB 52</span></div><b>→</b>
+            <div class="logic-node" data-node="extinction"><span>Current State</span></div>
+          </div>
+          <div class="logic-options">
+            <label><input type="checkbox" id="enable86" /> Route through 86 lockout</label>
+            <label><input type="checkbox" id="enableBF" checked /> Enable 50BF supervision</label>
+            <label><input type="checkbox" id="blockOutput" /> Block physical BO</label>
+          </div>
+        </div>
+
+        <div class="panel events-panel">
+          <div class="panel-head compact">
+            <div><div class="eyebrow">04 · EVENT & BINARY TRACE</div><h3>Sequence of Events</h3></div>
+            <button class="ghost" id="clearEvents">Clear</button>
+          </div>
+          <div class="event-table-wrap">
+            <table class="event-table">
+              <thead><tr><th>t (ms)</th><th>Event</th><th>State / Detail</th><th>Evidence</th></tr></thead>
+              <tbody id="eventTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel controls-panel">
+          <div class="run-controls">
+            <button class="primary" id="startBtn">▶ Start Injection</button>
+            <button id="stopBtn">■ Stop</button>
+            <button id="resetBtn">↺ Reset</button>
+            <div class="clock"><span>SIMULATED TIME</span><strong id="clockValue">0.000 s</strong></div>
+            <label>Speed
+              <select id="speedSelect"><option value="1">1×</option><option value="5" selected>5×</option><option value="20">20×</option></select>
+            </label>
+          </div>
+          <div class="preset-row">
+            <span>Presets</span>
+            <button data-preset="normal">Normal condition</button>
+            <button data-preset="fault2">Fault / Pickup</button>
+            <button data-preset="fault5">5× Pickup</button>
+            <button data-preset="dropout">Pickup & Dropout</button>
+            <button data-preset="biDisconnected">BI1 disconnected</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="lower-grid">
+        <div class="panel asset-panel">
+          <div class="panel-head compact"><div><div class="eyebrow">ASSET-BASED LEARNING</div><h3 id="assetCoverageTitle">Generic function coverage</h3></div></div>
+          <div id="assetFunctionCards" class="function-card-grid"></div>
+        </div>
+        <div class="panel evidence-panel">
+          <div class="panel-head compact"><div><div class="eyebrow">EVIDENCE & REPRODUCIBILITY</div><h3>Session Evidence</h3></div><button class="ghost" id="exportBtn">Export JSON</button></div>
+          <div class="evidence-grid" id="evidenceGrid"></div>
+        </div>
+      </section>
+
+      <section class="panel reference-panel">
+        <div class="panel-head compact"><div><div class="eyebrow">REFERENCE HARDWARE · VISUAL ONLY</div><h3>Physical Context</h3></div></div>
+        <div class="reference-grid">
+          <figure><img src="./assets/reference-onlly.jpg" alt="ONLLY protection relay tester used as a physical interface reference." /><figcaption>ONLLY tester photo — panel layout / BI-BO / phasor reference only; exact model capability remains unverified.</figcaption></figure>
+          <figure><img src="./assets/reference-siprotec.jpg" alt="Siemens SIPROTEC relays used as device-family reference." /><figcaption>Siemens SIPROTEC devices — vendor profile is kept separate from the generic calculation engine until manuals are validated.</figcaption></figure>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
