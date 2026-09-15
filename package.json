@@ -1,0 +1,12 @@
+{
+  "name": "relay-lab-v2",
+  "version": "2.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Static protection relay and secondary injection engineering simulator",
+  "scripts": {
+    "test:core": "node tests/core-smoke.mjs",
+    "test:ui": "node tests/ui-static.mjs",
+    "test": "node tests/core-smoke.mjs && node tests/ui-static.mjs"
+  }
+}
