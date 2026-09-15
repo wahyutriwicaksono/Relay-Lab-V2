@@ -1,0 +1,53 @@
+CORE TESTS: 52/52 PASS
+PASS | tester output off => zero injected current
+PASS | tester output on => command injected
+PASS | disconnected channel => zero actual
+PASS | closed-loop factor => zero actual current
+PASS | IEC SI 2x TMS .1 ≈ 1.0029 s | 1.0029027020046872
+PASS | balanced residual ≈0 | 4.440892098500626e-16
+PASS | balanced negative sequence ≈0 | 1.5258555995074125e-16
+PASS | single-phase I2 = 2/3 A | 0.6666666666666666
+PASS | 51 picks at 2x | {"supported":true,"picked":true,"measured":2,"expected":1.0029027020046872,"reason":"51 pickup: Imax 2.000 A ≥ I> 1.000 A. IEC SI timer active.","unit":"A","stage":"51","details":{"p51":true,"t51":1.0029027020046872,"p50":false,"t50":null,"parallel50Enabled":true,"highPickup":5},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | parallel 50 controls faster stage | {"supported":true,"picked":true,"measured":2,"expected":0.03,"reason":"Parallel 50 high-set controls: Imax 2.000 A ≥ I>> 1.500 A. 51 is also evaluated independently.","unit":"A","stage":"50","details":{"p51":true,"t51":1.0029027020046872,"p50":true,"t50":0.03,"parallel50Enabled":true,"highPickup":1.5},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 67 generic forward picks | {"supported":true,"picked":true,"measured":2,"expected":0.1,"reason":"Forward generic directional decision on phase A (torque angle 0.0°); I=2.000 A exceeds pickup 1.000 A.","unit":"A","stage":"67","details":{"phase":"A","torqueAngle":0,"mta":0,"forward":true,"genericDirectionalModel":true},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 67 generic reverse blocks | {"supported":true,"picked":false,"measured":2,"expected":null,"reason":"Reverse/block generic directional decision on phase A (torque angle 180.0°); I=2.000 A exceeds pickup 1.000 A.","unit":"A","stage":"67","details":{"phase":"A","torqueAngle":180,"mta":0,"forward":false,"genericDirectionalModel":true},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 24 V/Hz picks on high V/f | {"supported":true,"picked":true,"measured":1.2248468941382327,"expected":1,"reason":"V/Hz = 1.225 pu ≥ 1.100 pu.","unit":"pu","stage":"24","details":{"nominalV":63.5,"nominalF":50,"vMax":70,"freq":45},"iMax":2,"vMin":70,"vMax":70,"freq":45}
+PASS | 25 synchronism permissive in limits | {"supported":true,"picked":true,"measured":5,"expected":0.05,"reason":"25 generic check: close request present, ΔV=0.79% (≤10%), Δf=0.000 Hz (≤0.2), Δφ=5.00° (≤10°).","unit":"—","stage":"25 permissive","details":{"dvPct":0.7874015748031495,"df":0,"dAngle":5,"closeRequest":true,"maxDv":10,"maxDf":0.2,"maxAngle":10},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 32R reverse power picks | {"supported":true,"picked":true,"measured":-190.5,"expected":0.5,"reason":"Reverse real power -190.50 W(sec) ≤ -50.00 W threshold.","unit":"W(sec)","stage":"32R","details":{"signConvention":"positive = export from modeled source to system"},"iMax":1,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 63 binary contact picks | {"supported":true,"picked":true,"measured":1,"expected":0.05,"reason":"63 mechanical/process contact is ACTIVE; debounce/qualification timer started.","unit":"BI","stage":"63","details":{},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 87T through current stable | {"supported":true,"picked":false,"measured":3.510833468576701e-16,"expected":null,"reason":"87T generic compensated-input model: phase B Idiff=0.000 A, Ibias=1.000 A, operating threshold=0.500 A. Stable/restraint region.","unit":"A","stage":"87T","details":{"phases":[{"phase":"A","idiff":1.2246467991473532e-16,"ibias":1,"threshold":0.5,"margin":-0.4999999999999999},{"phase":"B","idiff":3.510833468576701e-16,"ibias":1,"threshold":0.5,"margin":-0.49999999999999967},{"phase":"C","idiff":3.510833468576701e-16,"ibias":1,"threshold":0.5,"margin":-0.49999999999999967}],"worst":{"phase":"B","idiff":3.510833468576701e-16,"ibias":1,"threshold":0.5,"margin":-0.49999999999999967},"picked":false,"assumption":"IA/IB/IC and IX/IY/IZ are treated as already ratio/phase-compensated currents, all positive into the zone."},"iMax":1,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 87T internal differential operates | {"supported":true,"picked":true,"measured":1,"expected":0.1,"reason":"87T generic compensated-input model: phase A Idiff=1.000 A, Ibias=0.500 A, operating threshold=0.350 A. Operating region entered.","unit":"A","stage":"87T","details":{"phases":[{"phase":"A","idiff":1,"ibias":0.5,"threshold":0.35,"margin":0.65},{"phase":"B","idiff":3.510833468576701e-16,"ibias":1,"threshold":0.5,"margin":-0.49999999999999967},{"phase":"C","idiff":3.510833468576701e-16,"ibias":1,"threshold":0.5,"margin":-0.49999999999999967}],"worst":{"phase":"A","idiff":1,"ibias":0.5,"threshold":0.35,"margin":0.65},"picked":true,"assumption":"IA/IB/IC and IX/IY/IZ are treated as already ratio/phase-compensated currents, all positive into the zone."},"iMax":1,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 50 instantaneous/high-set operates | {"supported":true,"picked":true,"measured":2,"expected":0.03,"reason":"50 pickup: Imax 2.000 A ≥ I>> 1.000 A.","unit":"A","stage":"50","details":{},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 50N residual current operates | {"supported":true,"picked":true,"measured":0.6,"expected":0.03,"reason":"50N pickup: calculated residual |IA+IB+IC| = 0.600 A exceeds 0.500 A.","unit":"A","stage":"50N","details":{"basis":"calculated residual 3I0; measured neutral input is a separate future channel mode"},"iMax":0.6,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 51N residual IDMT operates | {"supported":true,"picked":true,"measured":0.6,"expected":1.0029027020046872,"reason":"51N pickup: calculated residual |IA+IB+IC| = 0.600 A exceeds 0.300 A.","unit":"A","stage":"51N","details":{"basis":"calculated residual 3I0; measured neutral input is a separate future channel mode"},"iMax":0.6,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | 27 undervoltage operates | {"supported":true,"picked":true,"measured":40,"expected":0.2,"reason":"Minimum phase voltage 40.00 V ≤ U< 55.00 V.","unit":"V","stage":"27","details":{},"iMax":2,"vMin":40,"vMax":40,"freq":50}
+PASS | 59 overvoltage operates | {"supported":true,"picked":true,"measured":80,"expected":0.2,"reason":"Maximum phase voltage 80.00 V ≥ U> 70.00 V.","unit":"V","stage":"59","details":{},"iMax":2,"vMin":80,"vMax":80,"freq":50}
+PASS | 59N residual overvoltage operates | {"supported":true,"picked":true,"measured":25,"expected":0.2,"reason":"Calculated residual |VA+VB+VC| = 25.00 V exceeds 15.00 V.","unit":"V","stage":"59N","details":{"basis":"calculated residual 3V0; broken-delta measured input is not implied"},"iMax":2,"vMin":0,"vMax":25,"freq":50}
+PASS | 81U underfrequency operates | {"supported":true,"picked":true,"measured":47,"expected":0.2,"reason":"Frequency 47.00 Hz ≤ f< 48.00 Hz.","unit":"Hz","stage":"81U","details":{},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":47}
+PASS | 81O overfrequency operates | {"supported":true,"picked":true,"measured":53,"expected":0.2,"reason":"Frequency 53.00 Hz ≥ f> 52.00 Hz.","unit":"Hz","stage":"81O","details":{},"iMax":2,"vMin":63.5,"vMax":63.5,"freq":53}
+PASS | 46 negative-sequence operates | {"supported":true,"picked":true,"measured":0.3333333333333333,"expected":0.5,"reason":"Negative-sequence current I2 0.333 A ≥ 0.200 A.","unit":"A","stage":"46","details":{},"iMax":1,"vMin":63.5,"vMax":63.5,"freq":50}
+PASS | IEC VI finite above pickup
+PASS | IEC EI finite above pickup
+PASS | Definite time operates at exact pickup
+PASS | Inverse curve stays infinite at exact pickup
+PASS | 21 is explicitly unsupported, not faked
+PASS | 49 is explicitly unsupported until thermal-state engine exists
+PASS | open-loop 51 breaker endpoint PASS | {"verdict":"PASS","expectedMs":1080.9027020046874,"actualMs":1081.0000000000002,"error":0.09729799531282879,"detail":"Observed endpoint is within the declared training tolerance."}
+PASS | open-loop breaker opens but current retained | {"pickup":true,"operate":true,"scheme":true,"bo":true,"bi":true,"lockout":false,"coil":true,"breakerOpen":true,"currentZero":false,"bfInitiate":true,"bfCleared":true,"bfOperate":false,"retrip":false,"upstreamTrip":false}
+PASS | closed-loop current-zero PASS | {"verdict":"PASS","expectedMs":1100.9027020046874,"actualMs":1101.0000000000002,"error":0.09729799531282879,"detail":"Observed endpoint is within the declared training tolerance."}
+PASS | closed-loop actual current zero only after event
+PASS | 86 route PASS and lockout operates | {"verdict":"PASS","expectedMs":1090.9027020046874,"actualMs":1091.0000000000002,"error":0.09729799531282879,"detail":"Observed endpoint is within the declared training tolerance."}
+PASS | 86 adds route delay consistently | {"verdict":"PASS","expectedMs":1090.9027020046874,"actualMs":1091.0000000000002,"error":0.09729799531282879,"detail":"Observed endpoint is within the declared training tolerance."}
+PASS | breaker failure drives 50BF and upstream trip | {"states":{"pickup":false,"operate":true,"scheme":true,"bo":true,"bi":true,"lockout":false,"coil":true,"breakerOpen":false,"currentZero":true,"bfInitiate":true,"bfCleared":false,"bfOperate":true,"retrip":true,"upstreamTrip":true},"result":{"verdict":"PASS","expectedMs":1259.9027020046872,"actualMs":1261.0000000000002,"error":1.0972979953130562,"detail":"Observed endpoint is within the declared training tolerance."}}
+PASS | BI disconnected => BI endpoint FAIL | {"verdict":"FAIL","detail":"Expected endpoint “bi” was not observed."}
+PASS | BI disconnected does not prevent breaker trip | {"pickup":true,"operate":true,"scheme":true,"bo":true,"bi":false,"lockout":false,"coil":true,"breakerOpen":true,"currentZero":false,"bfInitiate":true,"bfCleared":true,"bfOperate":false,"retrip":false,"upstreamTrip":false}
+PASS | BO blocked => breaker endpoint FAIL | {"verdict":"FAIL","detail":"Expected endpoint “breaker” was not observed."}
+PASS | BO blocked event logged once | 1
+PASS | linear ramp finds pickup near setting | 1.0003636363636363
+PASS | linear ramp observes dropout on falling ramp | 1.0013333333333334
+PASS | ramp verdict uses pickup-value tolerance | {"verdict":"PASS","detail":"Pickup search error 0.04% against configured training tolerance ±5.00%.","pickupMeasured":1.0003636363636363,"dropoutMeasured":1.0013333333333334,"pickupErrorPct":0.03636363636363438}
+PASS | state sequence fault begins after prefault | 0.25
+PASS | state sequence operate endpoint PASS | {"verdict":"PASS","expectedMs":30,"actualMs":30.00000000000003,"error":2.842170943040401e-14,"detail":"Observed endpoint is within the declared training tolerance."}
+PASS | element reset does not close breaker
+PASS | 86 reset is separate from element reset
+PASS | breaker can close after 86 reset
